@@ -266,13 +266,20 @@ public struct Vec2
 		float dotProduct = this.x * other.x + this.y * other.y;
 		return dotProduct;
 	}
-
+	/// <summary>
+	/// Normalizes the vector and rotates it perpendicular to a line
+	/// </summary>
+	/// <returns></returns>
 	public Vec2 Normal()
 	{
 		Normalize();
 		return new Vec2(-this.y, this.x);
 	}
-
+	/// <summary>
+	/// Reflects the vector when it bouncess on a line. The angle of the VECin will be the same as the angle of VECout
+	/// </summary>
+	/// <param name="pNormal"></param>
+	/// <param name="bounciness"></param>
 	public void Reflect(Vec2 pNormal, float bounciness = 1f)
 	{
 		Vec2 normalNormal = pNormal.Normal();

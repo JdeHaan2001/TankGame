@@ -114,7 +114,7 @@ namespace GXPEngine
             return t;
         }
         /// <summary>
-        /// Calculates
+        /// Calculates teh distance between a ball and a line
         /// </summary>
         /// <param name="ballPos"></param>
         /// <param name="lineStart"></param>
