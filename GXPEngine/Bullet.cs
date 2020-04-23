@@ -7,14 +7,26 @@ public class Bullet : Sprite
     private Vec2 _position;
 
     private Tank _tank;
+    private Turret _turret;
     private int _lives = 3;
     private const int _radius = 5;
     public Bullet(Vec2 pPosition, Vec2 pVelocity, Tank pTank) : base("assets/bulletRed.png")
     {
+        MyGame myGame = (MyGame)game;
         SetOrigin(width / 2, height / 2);
         _position = pPosition;
         _velocity = pVelocity;
         _tank = pTank;
+        _turret = myGame.getTurret();
+    }
+    private void collisionCheckTurret()
+    {
+        Vec2 distance = _turret.position - this._position;
+        if (distance.Length < _radius + _turret._radius)
+        {
+            LateDestroy();
+            _turret.deductLive();
+        }
     }
     private void handleDestroy()
     {
@@ -84,5 +96,6 @@ public class Bullet : Sprite
         handleDestroy();
         handleBoundaryCol();
         collisionCheckTank();
+        collisionCheckTurret();
     }
 }

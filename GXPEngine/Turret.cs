@@ -3,10 +3,11 @@ using GXPEngine;
 
 public class Turret : EasyDraw
 {
-    private int _radius;
+    public int _radius;
     
     private const int _maxShootWait = 120;
     private int _timer = _maxShootWait - 1;
+    private int _lives = 3;
     private const float _barrelLength = 52f;
     private const int _bulletSpeed = 5;
     private const float barrelRotSpeed = 2.0f;
@@ -14,6 +15,14 @@ public class Turret : EasyDraw
 
     private TurretBarrel _turret;
     private Tank _tank;
+
+    public Vec2 position
+    {
+        get
+        {
+            return _position;
+        }
+    }
     public Turret(int pRadius, Vec2 pPosition) : base(pRadius * 2 +1, pRadius * 2 + 1)
     {
         MyGame myGame = (MyGame)game;
@@ -25,6 +34,18 @@ public class Turret : EasyDraw
         _turret = new TurretBarrel(x, y);
         AddChild(_turret);
 
+    }
+    public void deductLive()
+    {
+        _lives--;
+    }
+    private void handleDeath()
+    {
+        if (_lives == 0)
+        {
+            _position = new Vec2(Utils.Random(20, game.width - 20), Utils.Random(20, game.height - 20));
+            _lives = 3;
+        }
     }
     private void updateScreenPos()
     {
@@ -71,5 +92,6 @@ public class Turret : EasyDraw
         updateScreenPos();
         SlowlyToMouse();
         shoot();
+        handleDeath();
     }
 }
