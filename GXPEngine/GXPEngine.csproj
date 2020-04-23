@@ -78,6 +78,9 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Tank.cs" />
+    <Compile Include="Turret.cs" />
+    <Compile Include="TurretBarrel.cs" />
+    <Compile Include="TurretBullet.cs" />
     <Compile Include="Vec2.cs" />
   </ItemGroup>
   <ItemGroup />

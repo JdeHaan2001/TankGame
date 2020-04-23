@@ -13,9 +13,12 @@ public class Tank : Sprite
     }
     private Barrel _barrel;
 
-    private float _speed = 0.2f;
+    private float _speed = 0.15f;
     private const float barrelRotSpeed = 2.0f;
-    private const float barrelLength = 10f;
+    private const float barrelLength = 25f;
+
+    private int _lives = 3;
+    private const int _bulletSpeed = 5;
 
     private Vec2 _velocity;
     private Vec2 _acceleration;
@@ -28,6 +31,7 @@ public class Tank : Sprite
         _barrel = new Barrel(x, y);
         AddChild(_barrel);
     }
+   
     private void controls()
     {
         if (Input.GetKey(Key.A))
@@ -75,13 +79,17 @@ public class Tank : Sprite
             _barrel.rotation += over180degrees ? -addToRot : addToRot;
         }
     }
-    void Shoot()
+    private void Shoot()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Vec2 barrelEnd = Vec2.GetUnitVecDeg(_barrel.rotation + this.rotation) * barrelLength;
-            game.AddChild(new Bullet(barrelEnd + _position, Vec2.GetUnitVecDeg(_barrel.rotation + rotation) * 5, this));
+            game.AddChild(new Bullet(barrelEnd + _position, Vec2.GetUnitVecDeg(_barrel.rotation + rotation) * _bulletSpeed, this));
         }
+    }
+    public void removeLive()
+    {
+        _lives--;
     }
     private void Update()
     {
