@@ -6,40 +6,64 @@ public class Bullet : Sprite
     private Vec2 _velocity;
     private Vec2 _position;
     private Vec2 _oldPosition;
-    public Bullet(Vec2 pPosition, Vec2 pVelocity) : base("assets/bulletRed1.png")
+
+    private Tank _tank;
+    private int _lives = 3;
+    private const int _radius = 5;
+    public Bullet(Vec2 pPosition, Vec2 pVelocity, Tank pTank) : base("assets/bulletRed.png")
     {
         SetOrigin(width / 2, height / 2);
         _position = pPosition;
         _velocity = pVelocity;
         _oldPosition = new Vec2(0, 0);
+        _tank = pTank;
     }
-    private void checkBoundaryColHorizontal()
+    private void handleDestroy()
     {
-        MyGame myGame = (MyGame)game;
-        if (_position.x - width < 0)
+        if (_lives <= 0)
         {
-            _position = Physics.PoIBorderHorizontal(_oldPosition, _velocity, _position, 0f, width);
-            _velocity.x = -1 * _velocity.x;
-        }
-        else if (_position.x + width > game.width) 
-        {
-            _position = Physics.PoIBorderHorizontal(_oldPosition, _velocity, _position, game.width, width);
-            _velocity.x = -1 * _velocity.x;
+            LateDestroy();
         }
     }
-    private void checkBoundaryColVertical()
+    private void resolveCollision(Vec2 lineStart, Vec2 lineEnd, float dist)
+    {
+        Vec2 line = lineEnd - lineStart;
+        Vec2 newPos = _position + ((-dist + _radius) * line.Normal());
+        x = newPos.x;
+        y = newPos.y;
+    }
+    private void handleVecReflect(Vec2 lineStart, Vec2 lineEnd)
+    {
+        Vec2 line = lineEnd - lineStart;
+        _velocity.Reflect(line);
+    }
+    private void colCheck(Vec2 start, Vec2 end)
+    {
+        float ballDistance = Physics.CalculateBallDist(_position, start, end);
+
+        if (ballDistance <= _radius)
+        {
+            resolveCollision(start, end, ballDistance);
+            handleVecReflect(start, end);
+            _lives--;
+        }
+    }
+    private void handleBoundaryCol()
     {
         MyGame myGame = (MyGame)game;
-        if (_position.y - height < 0)
-        {
-            _position = Physics.PoIBorderVertical(_oldPosition, _velocity, _position, 0f, height);
-            _velocity.y = -1 * _velocity.y;
-        }
-        else if (_position.y + height > game.height)
-        {
-            _position = Physics.PoIBorderVertical(_oldPosition, _velocity, _position, game.height, height);
-            _velocity.y = -1 * _velocity.y;
-        }
+        Vec2 lineTopStart = new Vec2(0, 0);
+        Vec2 lineTopEnd = new Vec2(game.width, 0);
+        Vec2 lineBottomStart = new Vec2(game.width, game.height);
+        Vec2 lineBottomEnd = new Vec2(0, game.height);
+        Vec2 lineRightStart = new Vec2(game.width, 0);
+        Vec2 lineRightEnd = new Vec2(game.width, game.height);
+        Vec2 lineLeftStart = new Vec2(0, game.height);
+        Vec2 lineLeftEnd = new Vec2(0, 0);
+
+        colCheck(lineTopStart, lineTopEnd);
+        colCheck(lineBottomStart, lineBottomEnd);
+        colCheck(lineRightStart, lineRightEnd);
+        colCheck(lineLeftStart, lineLeftEnd);
     }
     private void updateScreenPos()
     {
@@ -51,7 +75,7 @@ public class Bullet : Sprite
         _oldPosition = _position;
         _position += _velocity;
         updateScreenPos();
-        checkBoundaryColHorizontal();
-        checkBoundaryColVertical();
+        handleDestroy();
+        handleBoundaryCol();
     }
 }

@@ -80,7 +80,7 @@ public class Tank : Sprite
         if (Input.GetMouseButtonDown(0))
         {
             Vec2 barrelEnd = Vec2.GetUnitVecDeg(_barrel.rotation + this.rotation) * barrelLength;
-            game.AddChild(new Bullet(barrelEnd + _position, Vec2.GetUnitVecDeg(_barrel.rotation + rotation) * 5));
+            game.AddChild(new Bullet(barrelEnd + _position, Vec2.GetUnitVecDeg(_barrel.rotation + rotation) * 5, this));
         }
     }
     private void Update()
