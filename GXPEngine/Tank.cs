@@ -18,8 +18,12 @@ public class Tank : Sprite
     private const float barrelLength = 25f;
 
     private int _lives = 3;
+    private int _score = 0;
+    private int _timerCounter = 0;
+    private const int _timerWait = 120; // Don't know why 120 works for this since it runs on 60fps, if 120 is too fast change to 60
     private const int _bulletSpeed = 5;
 
+    private bool _isDead = false;
     private Vec2 _velocity;
     private Vec2 _acceleration;
     private Vec2 _position;
@@ -31,7 +35,32 @@ public class Tank : Sprite
         _barrel = new Barrel(x, y);
         AddChild(_barrel);
     }
-   
+    public bool GetIsDead()
+    {
+        return _isDead;
+    }
+    public void RemoveLive()
+    {
+        _lives--;
+    }
+    public int GetScore()
+    {
+        return _score;
+    }
+    public void AddScore(int addScore)
+    {
+        _score += addScore;
+    }
+    private void handleScore()
+    {
+        if (!_isDead)
+        {
+            _timerCounter++;
+            int timer = _timerCounter % _timerWait;
+            if (timer == 0)
+                _score++;
+        }
+    }
     private void controls()
     {
         if (Input.GetKey(Key.A))
@@ -87,10 +116,14 @@ public class Tank : Sprite
             game.AddChild(new Bullet(barrelEnd + _position, Vec2.GetUnitVecDeg(_barrel.rotation + rotation) * _bulletSpeed, this));
         }
     }
-    public void removeLive()
+    private void handleDeath()
     {
-        _lives--;
+        if (_lives == 0)
+        {
+            _isDead = true;
+        }
     }
+    
     private void Update()
     {
         controls();
@@ -99,5 +132,7 @@ public class Tank : Sprite
         _position += _velocity;
         SlowlyToMouse();
         Shoot();
+        handleDeath();
+        handleScore();
     }
 }

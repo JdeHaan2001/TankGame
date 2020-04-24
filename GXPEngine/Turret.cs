@@ -11,6 +11,7 @@ public class Turret : EasyDraw
     private const float _barrelLength = 52f;
     private const int _bulletSpeed = 5;
     private const float barrelRotSpeed = 2.0f;
+    private const float _turretTankDist = 500f;
     private Vec2 _position;
 
     private TurretBarrel _turret;
@@ -45,6 +46,10 @@ public class Turret : EasyDraw
         {
             _position = new Vec2(Utils.Random(20, game.width - 20), Utils.Random(20, game.height - 20));
             _lives = 3;
+            if (!_tank.GetIsDead())
+            {
+                _tank.AddScore(50);
+            }
         }
     }
     private void updateScreenPos()
@@ -75,8 +80,8 @@ public class Turret : EasyDraw
     }
     private void shoot()
     {
-        Vec2 distance = _tank.position - _position;
-        if (distance.Length <= 300)
+        bool isTankDead = _tank.GetIsDead();
+        if (!isTankDead)
         {
             _timer++;
             int waitAmount = _timer % _maxShootWait;

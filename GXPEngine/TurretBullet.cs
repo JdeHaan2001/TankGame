@@ -7,14 +7,17 @@ public class TurretBullet : Sprite
     private Vec2 _position;
 
     private Turret _turret;
+    private Tank _tank;
     private int _lives = 3;
     private const int _radius = 5;
     public TurretBullet(Vec2 pPosition, Vec2 pVelocity, Turret pTurret) : base("assets/bulletGreen.png")
     {
+        MyGame myGame = (MyGame)game;
         SetOrigin(width / 2, height / 2);
         _position = pPosition;
         _velocity = pVelocity;
         _turret = pTurret;
+        _tank = myGame.getTank();
     }
     private void handleBulletDestroy()
     {
@@ -52,19 +55,21 @@ public class TurretBullet : Sprite
     private void handleBoundaryCol()
     {
         MyGame myGame = (MyGame)game;
-        Vec2 lineTopStart = new Vec2(0, 0);
-        Vec2 lineTopEnd = new Vec2(game.width, 0);
-        Vec2 lineBottomStart = new Vec2(game.width, game.height);
-        Vec2 lineBottomEnd = new Vec2(0, game.height);
-        Vec2 lineRightStart = new Vec2(game.width, 0);
-        Vec2 lineRightEnd = new Vec2(game.width, game.height);
-        Vec2 lineLeftStart = new Vec2(0, game.height);
-        Vec2 lineLeftEnd = new Vec2(0, 0);
-
-        colCheck(lineTopStart, lineTopEnd);
-        colCheck(lineBottomStart, lineBottomEnd);
-        colCheck(lineRightStart, lineRightEnd);
-        colCheck(lineLeftStart, lineLeftEnd);
+        colCheck(myGame.LineAngleLeft.start, myGame.LineAngleLeft.end);
+        colCheck(myGame.LineAngleRight.start, myGame.LineAngleRight.end);
+        colCheck(myGame.LineBottom.start, myGame.LineBottom.end);
+        colCheck(myGame.LineTop.start, myGame.LineTop.end);
+        colCheck(myGame.LineRight.start, myGame.LineRight.end);
+        colCheck(myGame.LineLeft.start, myGame.LineLeft.end);
+    }
+    private void handleTankCol()
+    {
+        Vec2 distance = _tank.position - this._position;
+        if (distance.Length < _radius + _tank.width / 2 - 5)
+        {
+            this.LateDestroy();
+            _tank.RemoveLive();
+        }
     }
     private void Update()
     {
@@ -72,5 +77,6 @@ public class TurretBullet : Sprite
         updateScreenPos();
         handleBoundaryCol();
         handleBulletDestroy();
+        handleTankCol();
     }
 }

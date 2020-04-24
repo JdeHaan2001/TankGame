@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GXPEngine;
 
 public class Bullet : Sprite
@@ -7,7 +8,7 @@ public class Bullet : Sprite
     private Vec2 _position;
 
     private Tank _tank;
-    private Turret _turret;
+    private List<Turret> _turretList;
     private int _lives = 3;
     private const int _radius = 5;
     public Bullet(Vec2 pPosition, Vec2 pVelocity, Tank pTank) : base("assets/bulletRed.png")
@@ -17,15 +18,18 @@ public class Bullet : Sprite
         _position = pPosition;
         _velocity = pVelocity;
         _tank = pTank;
-        _turret = myGame.getTurret();
+        _turretList = myGame.getTurretList();
     }
     private void collisionCheckTurret()
     {
-        Vec2 distance = _turret.position - this._position;
-        if (distance.Length < _radius + _turret._radius)
+        foreach (Turret other in _turretList)
         {
-            LateDestroy();
-            _turret.deductLive();
+            Vec2 distance = other.position - this._position;
+            if (distance.Length <= _radius + other._radius)
+            {
+                LateDestroy();
+                other.deductLive();
+            }
         }
     }
     private void handleDestroy()
@@ -48,7 +52,7 @@ public class Bullet : Sprite
         if (distance.Length < _radius + _tank.width/2)
         {
             LateDestroy();
-            _tank.removeLive();
+            _tank.RemoveLive();
         }
     }
     private void handleVecReflect(Vec2 lineStart, Vec2 lineEnd)
@@ -70,19 +74,12 @@ public class Bullet : Sprite
     private void handleBoundaryCol()
     {
         MyGame myGame = (MyGame)game;
-        Vec2 lineTopStart = new Vec2(0, 0);
-        Vec2 lineTopEnd = new Vec2(game.width, 0);
-        Vec2 lineBottomStart = new Vec2(game.width, game.height);
-        Vec2 lineBottomEnd = new Vec2(0, game.height);
-        Vec2 lineRightStart = new Vec2(game.width, 0);
-        Vec2 lineRightEnd = new Vec2(game.width, game.height);
-        Vec2 lineLeftStart = new Vec2(0, game.height);
-        Vec2 lineLeftEnd = new Vec2(0, 0);
-
-        colCheck(lineTopStart, lineTopEnd);
-        colCheck(lineBottomStart, lineBottomEnd);
-        colCheck(lineRightStart, lineRightEnd);
-        colCheck(lineLeftStart, lineLeftEnd);
+        colCheck(myGame.LineAngleLeft.start, myGame.LineAngleLeft.end);
+        colCheck(myGame.LineAngleRight.start, myGame.LineAngleRight.end);
+        colCheck(myGame.LineBottom.start, myGame.LineBottom.end);
+        colCheck(myGame.LineTop.start, myGame.LineTop.end);
+        colCheck(myGame.LineRight.start, myGame.LineRight.end);
+        colCheck(myGame.LineLeft.start, myGame.LineLeft.end);
     }
     private void updateScreenPos()
     {

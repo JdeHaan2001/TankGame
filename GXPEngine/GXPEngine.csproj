@@ -38,6 +38,9 @@
   <ItemGroup>
     <Compile Include="Barrel.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="GXPEngine\Arrow.cs" />
+    <Compile Include="GXPEngine\LineSegment.cs" />
+    <Compile Include="GXPEngine\NLineSegment.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
