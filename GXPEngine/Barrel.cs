@@ -10,12 +10,17 @@ public class Barrel : Sprite
         _position.y = py;
         SetOrigin(0, height/2);
     }
+    /*-----------------------------------------
+     *              updateScreenPos()
+     * ----------------------------------------*/
     private void updateScreenPos()
     {
         x = _position.x;
         y = _position.y;
     }
-
+    /*-----------------------------------------
+     *              Update()
+     * ----------------------------------------*/
     private void Update()
     {
         updateScreenPos();

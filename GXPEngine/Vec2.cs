@@ -5,7 +5,11 @@ public struct Vec2
 {
 	public float x;
 	public float y;
-
+	/// <summary>
+	/// Vec2 struct contains all the functions for vector math
+	/// </summary>
+	/// <param name="pX"></param>
+	/// <param name="pY"></param>
 	public Vec2(float pX = 0, float pY = 0)
 	{
 		x = pX;

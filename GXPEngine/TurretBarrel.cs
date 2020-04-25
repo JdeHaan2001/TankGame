@@ -10,13 +10,17 @@ public class TurretBarrel : Sprite
         _position.y = py;
         SetOrigin(8, height/2);
     }
-
+    /*-----------------------------------------
+     *              updateScreenPos()
+     * ----------------------------------------*/
     private void updateScreenPos()
     {
         x = _position.x;
         y = _position.y;
     }
-
+    /*-----------------------------------------
+     *              Update()
+     * ----------------------------------------*/
     private void Update()
     {
         updateScreenPos();

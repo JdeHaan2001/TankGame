@@ -9,7 +9,9 @@ public class Bullet : Sprite
 
     private Tank _tank;
     private List<Turret> _turretList;
+
     private int _lives = 3;
+
     private const int _radius = 5;
     public Bullet(Vec2 pPosition, Vec2 pVelocity, Tank pTank) : base("assets/bulletRed.png")
     {
@@ -18,8 +20,11 @@ public class Bullet : Sprite
         _position = pPosition;
         _velocity = pVelocity;
         _tank = pTank;
-        _turretList = myGame.getTurretList();
+        _turretList = myGame.GetTurretList();
     }
+    /*-----------------------------------------
+     *              collisionCheckTurret()
+     * ----------------------------------------*/
     private void collisionCheckTurret()
     {
         foreach (Turret other in _turretList)
@@ -32,6 +37,9 @@ public class Bullet : Sprite
             }
         }
     }
+    /*-----------------------------------------
+     *              handleDestroy()
+     * ----------------------------------------*/
     private void handleDestroy()
     {
         if (_lives <= 0)
@@ -39,6 +47,9 @@ public class Bullet : Sprite
             LateDestroy();
         }
     }
+    /*-----------------------------------------
+     *              resolveCollision()
+     * ----------------------------------------*/
     private void resolveCollision(Vec2 lineStart, Vec2 lineEnd, float dist)
     {
         Vec2 line = lineEnd - lineStart;
@@ -46,6 +57,9 @@ public class Bullet : Sprite
         x = newPos.x;
         y = newPos.y;
     }
+    /*-----------------------------------------
+     *              collisionCheckTank()
+     * ----------------------------------------*/
     private void collisionCheckTank()
     {
         Vec2 distance = _tank.position - this._position;
@@ -55,11 +69,17 @@ public class Bullet : Sprite
             _tank.RemoveLive();
         }
     }
+    /*-----------------------------------------
+     *              handleVecReflect()
+     * ----------------------------------------*/
     private void handleVecReflect(Vec2 lineStart, Vec2 lineEnd)
     {
         Vec2 line = lineEnd - lineStart;
         _velocity.Reflect(line);
     }
+    /*-----------------------------------------
+     *              colCheck()
+     * ----------------------------------------*/
     private void colCheck(Vec2 start, Vec2 end)
     {
         float ballDistance = Physics.CalculateBallDist(_position, start, end);
@@ -71,8 +91,12 @@ public class Bullet : Sprite
             _lives--;
         }
     }
+    /*-----------------------------------------
+     *              handleBoundaryCol()
+     * ----------------------------------------*/
     private void handleBoundaryCol()
     {
+        // I wanted to use a list to store the lines, but I couldn't get it to work in time
         MyGame myGame = (MyGame)game;
         colCheck(myGame.LineAngleLeft.start, myGame.LineAngleLeft.end);
         colCheck(myGame.LineAngleRight.start, myGame.LineAngleRight.end);
@@ -81,11 +105,17 @@ public class Bullet : Sprite
         colCheck(myGame.LineRight.start, myGame.LineRight.end);
         colCheck(myGame.LineLeft.start, myGame.LineLeft.end);
     }
+    /*-----------------------------------------
+     *              updateScreenPos()
+     * ----------------------------------------*/
     private void updateScreenPos()
     {
         x = _position.x;
         y = _position.y;
     }
+    /*-----------------------------------------
+     *              Update()
+     * ----------------------------------------*/
     private void Update()
     {
         _position += _velocity;

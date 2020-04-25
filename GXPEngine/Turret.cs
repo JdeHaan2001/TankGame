@@ -4,19 +4,34 @@ using GXPEngine;
 public class Turret : EasyDraw
 {
     public int _radius;
-    
+
+    private const int _bulletSpeed = 5;
     private const int _maxShootWait = 120;
     private int _timer = _maxShootWait - 1;
     private int _lives = 3;
+
     private const float _barrelLength = 52f;
-    private const int _bulletSpeed = 5;
+    
     private const float barrelRotSpeed = 2.0f;
-    private const float _turretTankDist = 500f;
+
     private Vec2 _position;
 
     private TurretBarrel _turret;
     private Tank _tank;
 
+    
+    public Turret(int pRadius, Vec2 pPosition) : base(pRadius * 2 +1, pRadius * 2 + 1)
+    {
+        MyGame myGame = (MyGame)game;
+        SetOrigin(width / 2, height / 2);
+        _radius = pRadius;
+        _position = pPosition;
+        _tank = myGame.GetTank();
+        drawTurretBody(255, 255, 255);
+        _turret = new TurretBarrel(x, y);
+        AddChild(_turret);
+
+    }
     public Vec2 position
     {
         get
@@ -24,22 +39,16 @@ public class Turret : EasyDraw
             return _position;
         }
     }
-    public Turret(int pRadius, Vec2 pPosition) : base(pRadius * 2 +1, pRadius * 2 + 1)
-    {
-        MyGame myGame = (MyGame)game;
-        SetOrigin(width / 2, height / 2);
-        _radius = pRadius;
-        _position = pPosition;
-        _tank = myGame.getTank();
-        Draw(255, 255, 255);
-        _turret = new TurretBarrel(x, y);
-        AddChild(_turret);
-
-    }
+    /// <summary>
+    /// This removes a live from the turret
+    /// </summary>
     public void deductLive()
     {
         _lives--;
     }
+    /*-----------------------------------------
+     *              handleDeath()
+     * ----------------------------------------*/
     private void handleDeath()
     {
         if (_lives == 0)
@@ -52,18 +61,27 @@ public class Turret : EasyDraw
             }
         }
     }
+    /*-----------------------------------------
+     *              updateScreenPos()
+     * ----------------------------------------*/
     private void updateScreenPos()
     {
         x = _position.x;
         y = _position.y;
     }
-    private void Draw(byte red, byte green, byte blue)
+    /*-----------------------------------------
+     *              drawTurretBody()
+     * ----------------------------------------*/
+    private void drawTurretBody(byte red, byte green, byte blue)
     {
         Fill(red, green, blue);
         Stroke(red, green, blue);
         Ellipse(_radius, _radius, 2 * _radius, 2 * _radius);
     }
-    private void SlowlyToMouse()
+    /*-----------------------------------------
+     *              slowlyToMouse()
+     * ----------------------------------------*/
+    private void slowlyToMouse()
     {
         Vec2 mouseV = _tank.position;
         Vec2 midTank = new Vec2(x, y);
@@ -78,6 +96,9 @@ public class Turret : EasyDraw
             _turret.rotation += over180degrees ? -addToRot : addToRot;
         }
     }
+    /*-----------------------------------------
+     *              shoot()
+     * ----------------------------------------*/
     private void shoot()
     {
         bool isTankDead = _tank.GetIsDead();
@@ -92,10 +113,13 @@ public class Turret : EasyDraw
             }
         }
     }
+    /*-----------------------------------------
+     *              Update()
+     * ----------------------------------------*/
     private void Update()
     {
         updateScreenPos();
-        SlowlyToMouse();
+        slowlyToMouse();
         shoot();
         handleDeath();
     }

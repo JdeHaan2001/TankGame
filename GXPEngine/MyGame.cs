@@ -17,34 +17,68 @@ public class MyGame : Game
 	private EasyDraw _scoreHud;
 	private EasyDraw _deathScreen;
 	private UnitTests _tests;
+
 	private const int _maxWait = 3000;
 	private const int _maxTurretAmount = 5;
+
 	private int _timer = _maxWait - 1;
 	private int _turretAmount = 0;
 	
 	public MyGame() : base(1280, 720, false)
 	{
 		createLines();
+		createTank();
+		createText();
+		createTests();
 		_turretList = new List<Turret>();
-		_tank = new Tank(width/2, height/2);
-		AddChild(_tank);
+	}
+	/// <summary>
+	/// This returns the list where all the turrets are stored in
+	/// </summary>
+	/// <returns></returns>
+	public List<Turret> GetTurretList()
+	{
+		return _turretList;
+	}
+	/// <summary>
+	/// This returns the tank. Use this to get acces to the public functions of the Tank class
+	/// </summary>
+	/// <returns></returns>
+	public Tank GetTank()
+	{
+		return _tank;
+	}
+	/*-----------------------------------------
+     *              createTests()
+     * ----------------------------------------*/
+	private void createTests()
+	{
+		_tests = new UnitTests();
+		AddChild(_tests);
+	}
+	/*-----------------------------------------
+     *              createText()
+     * ----------------------------------------*/
+	private void createText()
+	{
 		_scoreHud = new EasyDraw(150, 50);
 		_scoreHud.TextAlign(CenterMode.Min, CenterMode.Min);
 		AddChild(_scoreHud);
 		_deathScreen = new EasyDraw(1280, 720);
 		_deathScreen.TextAlign(CenterMode.Min, CenterMode.Min);
 		AddChild(_deathScreen);
-		_tests = new UnitTests();
-		AddChild(_tests);
 	}
-	public List<Turret> getTurretList()
+	/*-----------------------------------------
+     *              createTank()
+     * ----------------------------------------*/
+	private void createTank()
 	{
-		return _turretList;
+		_tank = new Tank(width / 2, height / 2);
+		AddChild(_tank);
 	}
-	public Tank getTank()
-	{
-		return _tank;
-	}
+	/*-----------------------------------------
+     *              createLines()
+     * ----------------------------------------*/
 	private void createLines()
 	{
 		LineTop = new NLineSegment(new Vec2(300,0), new Vec2(width, 0), 0xff00ff00, 3);
@@ -60,7 +94,10 @@ public class MyGame : Game
 		AddChild(LineAngleLeft);
 		AddChild(LineAngleRight);
 	}
-	private void handleTurretList()
+	/*-----------------------------------------
+     *              createTurrets()
+     * ----------------------------------------*/
+	private void createTurrets()
 	{
 		if (!_tank.GetIsDead())
 		{
@@ -80,19 +117,26 @@ public class MyGame : Game
 			}
 		}
 	}
+	/*-----------------------------------------
+     *              drawText()
+     * ----------------------------------------*/
 	private void drawText()
 	{
 		_scoreHud.Clear(Color.Empty);
 		_scoreHud.Text("Score: " + _tank.GetScore(), 0, 0);
+
 		if (_tank.GetIsDead())
 		{
 			_deathScreen.Clear(Color.Empty);
 			_deathScreen.Text("Game Over :(", 570, 200);
 		}
 	}
+	/*-----------------------------------------
+     *              Update()
+     * ----------------------------------------*/
 	void Update()
 	{
-		handleTurretList();
+		createTurrets();
 		drawText();
 	}
 

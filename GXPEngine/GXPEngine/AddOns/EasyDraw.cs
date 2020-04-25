@@ -156,7 +156,7 @@ namespace GXPEngine
 			graphics.Clear(Color.FromArgb (255, red, green, blue));
 		}
 
-		//////////// Draw & measure Text
+		//////////// drawTurretBody & measure Text
 		 
 		public void Text(string text, float x, float y) 
 		{
@@ -198,7 +198,7 @@ namespace GXPEngine
 			height = size.Height;
 		}
 
-		//////////// Draw Shapes
+		//////////// drawTurretBody Shapes
 		 
 		public void Rect(float x, float y, float width, float height) {
 			ShapeAlign (ref x, ref y, width, height);
