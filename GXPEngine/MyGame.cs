@@ -18,8 +18,8 @@ public class MyGame : Game
 	private EasyDraw _deathScreen;
 	private UnitTests _tests;
 
-	private const int _maxWait = 3000;
-	private const int _maxTurretAmount = 5;
+	private const int _maxWait = 3000; // Decrease this number for harder difficulty
+	private const int _maxTurretAmount = 5; // Increas this number for harder difficulty
 
 	private int _timer = _maxWait - 1;
 	private int _turretAmount = 0;
