@@ -84,6 +84,7 @@
     <Compile Include="Turret.cs" />
     <Compile Include="TurretBarrel.cs" />
     <Compile Include="TurretBullet.cs" />
+    <Compile Include="UnitTests.cs" />
     <Compile Include="Vec2.cs" />
   </ItemGroup>
   <ItemGroup />

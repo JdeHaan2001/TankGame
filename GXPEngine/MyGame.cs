@@ -16,6 +16,7 @@ public class MyGame : Game
 	private List<Turret> _turretList;
 	private EasyDraw _scoreHud;
 	private EasyDraw _deathScreen;
+	private UnitTests _tests;
 	private const int _maxWait = 3000;
 	private const int _maxTurretAmount = 5;
 	private int _timer = _maxWait - 1;
@@ -33,6 +34,8 @@ public class MyGame : Game
 		_deathScreen = new EasyDraw(1280, 720);
 		_deathScreen.TextAlign(CenterMode.Min, CenterMode.Min);
 		AddChild(_deathScreen);
+		_tests = new UnitTests();
+		AddChild(_tests);
 	}
 	public List<Turret> getTurretList()
 	{

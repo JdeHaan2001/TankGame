@@ -47,14 +47,6 @@ public struct Vec2
 		return new Vec2(v.x / scalar, v.y / scalar);
 	}
 
-
-	public Vec2 Multiply(float amountX, float amountY)
-	{
-		x *= amountX;
-		y *= amountY;
-		return this;
-	}
-
 	/// <summary>
 	/// Gets the length of the current vector
 	/// </summary>
