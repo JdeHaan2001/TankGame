@@ -71,6 +71,13 @@ public class Tank : Sprite
     {
         _score += addScore;
     }
+    /// <summary>
+    /// This returns the amount of lives of the tank
+    /// </summary>
+    public int GetLives()
+    {
+        return _lives;
+    }
     /*-----------------------------------------
      *              handleScore()
      * ----------------------------------------*/
@@ -160,9 +167,9 @@ public class Tank : Sprite
     private void handleDeath()
     {
         if (_lives == 0)
-        {
             _isDead = true;
-        }
+        if (_lives <= 0)
+            _lives = 0;
     }
     /*-----------------------------------------
      *              Update()

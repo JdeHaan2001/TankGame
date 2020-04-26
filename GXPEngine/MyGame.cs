@@ -16,6 +16,7 @@ public class MyGame : Game
 	private List<Turret> _turretList;
 	private EasyDraw _scoreHud;
 	private EasyDraw _deathScreen;
+	private EasyDraw _livesHud;
 	private UnitTests _tests;
 
 	private const int _maxWait = 3000; // Decrease this number for harder difficulty
@@ -67,6 +68,9 @@ public class MyGame : Game
 		_deathScreen = new EasyDraw(1280, 720);
 		_deathScreen.TextAlign(CenterMode.Min, CenterMode.Min);
 		AddChild(_deathScreen);
+		_livesHud = new EasyDraw(150, 330);
+		_livesHud.TextAlign(CenterMode.Min, CenterMode.Min);
+		AddChild(_livesHud);
 	}
 	/*-----------------------------------------
      *              createTank()
@@ -124,6 +128,8 @@ public class MyGame : Game
 	{
 		_scoreHud.Clear(Color.Empty);
 		_scoreHud.Text("Score: " + _tank.GetScore(), 0, 0);
+		_livesHud.Clear(Color.Empty);
+		_scoreHud.Text("Lives: " + _tank.GetLives(), 0, 20);
 
 		if (_tank.GetIsDead())
 		{
